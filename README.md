@@ -1,9 +1,9 @@
 # API Basic – Inventory Management
 
 ## 🔧 Technologies
-- ASP.NET Core Web API
-- Angular
-- SQL Server
+- ASP.NET Core Web API (Visual Studio 2022)
+- Angular (Visual Studio Code)
+- SQL Server 19
 - Bootstrap
 
 ## 📂 Project Structure
