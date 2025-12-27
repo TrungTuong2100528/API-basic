@@ -22,8 +22,7 @@ BackEnd/obj/
 **/bin/
 **/obj/
 appsettings.Development.json
-
+tall git-filter-repogit add .gitignore
 # VS / OS
 .vs/
 *.log
-cd E:\Code\ASP_API
