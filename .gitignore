@@ -23,9 +23,7 @@ BackEnd/obj/
 **/obj/
 appsettings.Development.json
 
-
 # VS / OS
 .vs/
-*.user
-*.suo
 *.log
+cd E:\Code\ASP_API
