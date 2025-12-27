@@ -1,0 +1,17 @@
+[33mcommit f0a1d8a3c879dc8721256a347ad30dd1fef893a6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: TrungTuong2100528 <cttuong2100528@gmail.com>
+Date:   Sat Dec 27 23:21:19 2025 +0700
+
+    Update backend: security connect sql
+
+[33mcommit dc25d9ff307bbad53b92c0b76aae959933747086[m
+Author: TrungTuong2100528 <cttuong2100528@gmail.com>
+Date:   Sat Dec 27 22:52:46 2025 +0700
+
+    create data sp_update
+
+[33mcommit b7944692557ee2b115d4ba872d06596cf0b7668d[m
+Author: TrungTuong2100528 <cttuong2100528@gmail.com>
+Date:   Fri Dec 26 16:08:51 2025 +0700
+
+    Initial commit: Backend + Frontend + Database
