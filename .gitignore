@@ -16,6 +16,11 @@ FrontEnd/dist/
 # ASP.NET
 BackEnd/bin/
 BackEnd/obj/
+*.user
+*.suo
+*.pdb
+**/bin/
+**/obj/
 
 # VS / OS
 .vs/
