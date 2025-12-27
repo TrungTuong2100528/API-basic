@@ -21,6 +21,8 @@ BackEnd/obj/
 *.pdb
 **/bin/
 **/obj/
+appsettings.Development.json
+
 
 # VS / OS
 .vs/
