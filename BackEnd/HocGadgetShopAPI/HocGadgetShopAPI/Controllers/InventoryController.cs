@@ -116,5 +116,32 @@ namespace HocGadgetShopAPI.Controllers
             connection.Close();
             return Ok();
         }
+
+        [HttpPut]
+        //Lấy danh sách inventory
+        public ActionResult UpdateInventoryData(InventoryRequestDto inventoryRequest)
+        {
+            SqlConnection connection = new SqlConnection
+            {
+                ConnectionString = "Server=DESKTOP-IBRTGQQ\\MSSQLSERVER01;Database=gadgetShop;User Id=project;Password=project;TrustServerCertificate=True;"
+
+            };
+            SqlCommand command = new SqlCommand
+            {
+                CommandText = "sp_DeleteInventoryDetails",
+                CommandType = CommandType.StoredProcedure,
+                Connection = connection
+            };
+            //Mở kết nối & chuẩn bị list
+            connection.Open();
+
+            command.Parameters.AddWithValue("@ProductId", inventoryRequest);
+
+            command.ExecuteNonQuery();
+
+            //Đóng kết nối & trả kết quả
+            connection.Close();
+            return Ok();
+        }
     }
 }
