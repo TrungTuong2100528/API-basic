@@ -16,24 +16,36 @@ namespace HocGadgetShopAPI.Controllers
     [ApiController]
     public class InventoryController : ControllerBase
     {
-       
+        //sẽ tự động inject config vào controller (Dependency Injection)
+        private readonly IConfiguration _configuration;
+
+        public InventoryController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+        //Tạo 1 helper method: Không còn password trong code; Chỉ đổi DB ở appsettings
+        private SqlConnection CreateConnection()
+        {
+            return new SqlConnection(
+                _configuration.GetConnectionString("DefaultConnection")
+            );
+        }
+
+
         [HttpPost]
         //B3. Model Binding bắt đầu làm việc
         public ActionResult SaveInventoryData(InventoryRequestDto requestDto)
         {
-            //Tạo kết nối SQL
-            SqlConnection connection = new SqlConnection
-            {
-                ConnectionString = "Server=DESKTOP-IBRTGQQ\\MSSQLSERVER01;Database=gadgetShop;User Id=project;Password=project;TrustServerCertificate=True;"
+            using SqlConnection connection = CreateConnection();
 
-            };
             //Tạo SqlCommand
             SqlCommand command = new SqlCommand
             {
-                CommandText= "sp_SaveinventoryData",
-                CommandType=CommandType.StoredProcedure,
-                Connection=connection
+                CommandText = "sp_SaveinventoryData",
+                CommandType = CommandType.StoredProcedure,
+                Connection = connection
             };
+           
             //Truyền tham số cho Stored Procedure
             command.Parameters.AddWithValue("@ProductID", requestDto.ProductID);
             command.Parameters.AddWithValue("@ProductName", requestDto.ProductName);
@@ -53,11 +65,8 @@ namespace HocGadgetShopAPI.Controllers
         //Lấy danh sách inventory
         public ActionResult GetInventoryData()
         {
-            SqlConnection connection = new SqlConnection
-            {
-                ConnectionString = "Server=DESKTOP-IBRTGQQ\\MSSQLSERVER01;Database=gadgetShop;User Id=project;Password=project;TrustServerCertificate=True;"
+            using SqlConnection connection = CreateConnection();
 
-            };
             SqlCommand command = new SqlCommand
             {
                 CommandText = "sp_GetInventoryData",
@@ -94,11 +103,8 @@ namespace HocGadgetShopAPI.Controllers
         //Lấy danh sách inventory
         public ActionResult DeleteInventoryData( int productId)
         {
-            SqlConnection connection = new SqlConnection
-            {
-                ConnectionString = "Server=DESKTOP-IBRTGQQ\\MSSQLSERVER01;Database=gadgetShop;User Id=project;Password=project;TrustServerCertificate=True;"
+            using SqlConnection connection = CreateConnection();
 
-            };
             SqlCommand command = new SqlCommand
             {
                 CommandText = "sp_DeleteInventoryDetails",
@@ -121,11 +127,7 @@ namespace HocGadgetShopAPI.Controllers
         //Lấy danh sách inventory
         public ActionResult UpdateInventoryData(InventoryRequestDto inventoryRequest)
         {
-            SqlConnection connection = new SqlConnection
-            {
-                ConnectionString = "Server=DESKTOP-IBRTGQQ\\MSSQLSERVER01;Database=gadgetShop;User Id=project;Password=project;TrustServerCertificate=True;"
-
-            };
+            using SqlConnection connection = CreateConnection();
             SqlCommand command = new SqlCommand
             {
                 CommandText = "sp_DeleteInventoryDetails",
