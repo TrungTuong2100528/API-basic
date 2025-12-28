@@ -130,14 +130,17 @@ namespace HocGadgetShopAPI.Controllers
             using SqlConnection connection = CreateConnection();
             SqlCommand command = new SqlCommand
             {
-                CommandText = "sp_DeleteInventoryDetails",
+                CommandText = "sp_UpdateInventoryData",
                 CommandType = CommandType.StoredProcedure,
                 Connection = connection
             };
             //Mở kết nối & chuẩn bị list
             connection.Open();
 
-            command.Parameters.AddWithValue("@ProductId", inventoryRequest);
+            command.Parameters.AddWithValue("@ProductId", inventoryRequest.ProductID);
+            command.Parameters.AddWithValue("@ProductName", inventoryRequest.ProductName);
+            command.Parameters.AddWithValue("@AvailableQTy", inventoryRequest.AvailableQTy);
+            command.Parameters.AddWithValue("@ReOderPoint", inventoryRequest.ReOderPoint);
 
             command.ExecuteNonQuery();
 

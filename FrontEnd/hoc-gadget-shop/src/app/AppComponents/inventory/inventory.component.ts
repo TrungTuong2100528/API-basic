@@ -19,9 +19,17 @@ export class InventoryComponent {
   //Get
   inventoryDetails: any; //Lưu dữ liệu API trả về
 
+  inventoryData = {
+    productID:"",
+    productName:"",
+    availableQty:0,
+    reOderPoint:0
+  }
+
   ngOnInit(){ //Hàm chạy khi component được load
      this.getInventoryDetails();
   }
+
 
   getInventoryDetails(){
     let aipUrl="https://localhost:7243/api/Inventory";
@@ -30,30 +38,32 @@ export class InventoryComponent {
       this.inventoryDetails = data; //Gán dữ liệu cho biến
       console.log(this.inventoryDetails) //Log để debug
      })
+
+     // Thiết lập lại sao khi put
+     this.inventoryData ={
+      productID:"",
+      productName:"",
+      availableQty:0,
+      reOderPoint:0
+     }
+     this.disavledProductIdInput = false;
   }
 
-  //post
-    inventoryData = {
-    productID:"",
-    productName:"",
-    availableQty:0,
-    reOderPoint:0
-  }
 
+  disavledProductIdInput= false;
 
   oSubmit(): void{ //Chạy khi bấm nút Submit
     
     let aipUrl="https://localhost:7243/api/Inventory";
-    //B1.1 Request thực tế gửi đi (qua asp.net bước tiếp theo)
     let httpOptions={ //Cấu hình HTTP Header
         headers: new HttpHeaders({
           Authorization: "my-auth-token", //Token (demo)
           "Content-Type": "application/json" //Báo cho API biết gửi JSON
         })
     }
-      
-  //B1 Angular gửi HTTP POST lên API:
-    this.httpClient.post(aipUrl, this.inventoryData,httpOptions).subscribe({
+  //Điều kiện trước khi post or put
+  if(this.disavledProductIdInput == true){
+    this.httpClient.put(aipUrl, this.inventoryData,httpOptions).subscribe({
       next: v=> console.log(v), //API trả dữ liệu thành công
       error: e=> console.log(e), //API lỗi (400 / 500)
       complete: () => { //Request hoàn tất
@@ -61,6 +71,18 @@ export class InventoryComponent {
         this.getInventoryDetails();
       }
     });
+  }
+  else{
+    // Angular gửi HTTP POST lên API:
+      this.httpClient.post(aipUrl, this.inventoryData,httpOptions).subscribe({
+        next: v=> console.log(v), //API trả dữ liệu thành công
+        error: e=> console.log(e), //API lỗi (400 / 500)
+        complete: () => { //Request hoàn tất
+          alert("Form Submitted successfully" + JSON.stringify(this.inventoryData));
+          this.getInventoryDetails();
+        }
+      });
+    }
   }
 
   // Delete
@@ -79,5 +101,16 @@ export class InventoryComponent {
     this.httpClient.delete(aipUrl).subscribe(data=>{
       this.getInventoryDetails();
     });
+  }
+
+  //Put
+  popularFormForEdit(inventory : any){
+    this.inventoryData.productID = inventory.productID;
+    this.inventoryData.productName = inventory.productName;
+    this.inventoryData.availableQty = inventory.availableQty;
+    this.inventoryData.reOderPoint = inventory.reOderPoint;
+
+    //Ngăn chặn nhập
+    this.disavledProductIdInput = true;
   }
 }

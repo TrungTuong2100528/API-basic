@@ -8,15 +8,15 @@
 
     <div class="col-md-3">
       <label class="form-label">Product Id</label>
-      <input type="text" class="form-control" placeholder="1001" [(ngModel)]="inventoryData.productID" name="productID">
+      <input type="text" class="form-control" [disabled]="disavledProductIdInput" placeholder="1001" [(ngModel)]="inventoryData.productID" name="productID">
     </div>
 
     <div class="col-md-3">
       <label class="form-label">Product Name</label>
       <select class="form-select" [(ngModel)]="inventoryData.productName" name="productName">
-        <option selected>Choose...</option>
+        <option value="">Choose...</option>
         <option value="Laptop">Laptop</option>
-        <option value="Phone">Phone</option>
+        <option value="Test">Test</option>
         <option value="Accessory">Accessory</option>
       </select>
     </div>
@@ -46,7 +46,7 @@
         <th>Product Id</th>
         <th>Product Name</th>
         <th>Stock 'hàng' Available 'Có sẳn'</th>
-        <th>Reorder Point 'điểm đặt hàng'/th>
+        <th>Reorder Point 'điểm đặt hàng'</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -58,7 +58,7 @@
         <td>{{inventory.availableQty}}</td>
         <td>{{inventory.reOderPoint}}</td>
         <td>
-          <button class="btn btn-sm btn-primary me-2">Edit</button>
+          <button class="btn btn-sm btn-primary me-2" (click)="popularFormForEdit(inventory)">Edit</button>
           <button class="btn btn-sm btn-danger" (click)="openConfirmDialog(inventory.productID)">Delete</button>
         </td>
       </tr>
