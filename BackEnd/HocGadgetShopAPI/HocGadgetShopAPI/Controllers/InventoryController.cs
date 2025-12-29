@@ -33,7 +33,6 @@ namespace HocGadgetShopAPI.Controllers
 
 
         [HttpPost]
-        //B3. Model Binding bắt đầu làm việc
         public ActionResult SaveInventoryData(InventoryRequestDto requestDto)
         {
             using SqlConnection connection = CreateConnection();
