@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Text.Json.Serialization;
 
 namespace HocGadgetShopAPI.Controllers
 {
@@ -24,11 +25,11 @@ namespace HocGadgetShopAPI.Controllers
 
 
         [HttpPost]
-        public ActionResult SaveInventoryData(CustomerRequestDto requestDto)
+        public ActionResult SaveCustomerData(CustomerRequestDto requestDto)
         {
             using SqlConnection connection = CreateConnection();
 
-            //Tạo SqlCommand
+
             SqlCommand command = new SqlCommand
             {
                 CommandText = "sp_SaveCustomerDetails",
@@ -36,7 +37,7 @@ namespace HocGadgetShopAPI.Controllers
                 Connection = connection
             };
 
-            //Truyền tham số cho Stored Procedure
+  
             command.Parameters.AddWithValue("@CustomerId", requestDto.CustomerId);
             command.Parameters.AddWithValue("@FirstName", requestDto.FirstName);
             command.Parameters.AddWithValue("@LastName", requestDto.LastName);
@@ -44,13 +45,49 @@ namespace HocGadgetShopAPI.Controllers
             command.Parameters.AddWithValue("@Phone", requestDto.Phone);
             command.Parameters.AddWithValue("@RegistrationDate", requestDto.RegistrationDate);
 
-            //Thực thi SQL
             connection.Open();
-            //ExecuteNonQuery() dùng để INSERT / UPDATE / DELETE
+
             command.ExecuteNonQuery();
+
             connection.Close();
-            //B4 Controller xử lý logic
+
             return Ok();
+        }
+
+        [HttpGet]
+        public ActionResult GetCustomerData()
+        {
+            using SqlConnection connection = CreateConnection();
+
+            SqlCommand command = new SqlCommand
+            {
+                CommandText = "sp_GetCustomerDetails",
+                CommandType = CommandType.StoredProcedure,
+                Connection = connection
+            };
+
+            connection.Open();
+
+            List<CustomerDto> customers = new List<CustomerDto>();
+            using(SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    CustomerDto customerDto = new CustomerDto();
+                    customerDto.CustomerId = Convert.ToInt32(reader["CustomerId"]);
+                    customerDto.FirstName = Convert.ToString(reader["FirstName"]);
+                    customerDto.LastName = Convert.ToString(reader["LastName"]);
+                    customerDto.Phone = Convert.ToString(reader["Phone"]);
+                    customerDto.Email = Convert.ToString(reader["Email"]);
+                    customerDto.RegistrationDate = Convert.ToDateTime(reader["RegistrationDate"]);
+
+                    customers.Add(customerDto);
+                }
+            }
+
+            connection.Close();
+
+            return Ok(customers);
         }
 
     }

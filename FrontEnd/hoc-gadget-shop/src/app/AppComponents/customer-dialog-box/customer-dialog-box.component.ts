@@ -39,7 +39,8 @@ export class CustomerDialogBoxComponent {
         error:e=>console.log(e),
         complete:()=>{
           alert("Customer details saved successfully: "+JSON.stringify(this.customerDetails));
-          this.modal.close();
+
+          this.modal.close({event:"closed"});
         }
       }
     )

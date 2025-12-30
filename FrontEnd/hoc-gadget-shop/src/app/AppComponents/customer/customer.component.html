@@ -22,12 +22,12 @@
     </thead>
 
     <tbody>
-      <tr>
-        <th scope="row">1250</th>
-        <td>Rahul Dixit</td>
-        <td>rahulail.com</td>
-        <td>9876543210</td>
-        <td>10-01-2024</td>
+      <tr *ngFor="let customer of customerDetails">
+        <th scope="row">{{customer.customerId}}</th>
+        <td>{{customer.firstName}} {{customer.lastName}}</td>
+        <td>{{customer.phone}}</td>
+        <td>{{customer.email}}</td>
+        <td>{{customer.registrationDate}}</td>
         <td>
           <button class="btn btn-sm btn-warning me-2">Edit</button>
           <button class="btn btn-sm btn-danger">Delete</button>
