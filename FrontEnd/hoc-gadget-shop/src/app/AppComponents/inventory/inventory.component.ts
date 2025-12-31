@@ -73,11 +73,10 @@ export class InventoryComponent {
     });
   }
   else{
-    // Angular gửi HTTP POST lên API:
       this.httpClient.post(aipUrl, this.inventoryData,httpOptions).subscribe({
-        next: v=> console.log(v), //API trả dữ liệu thành công
-        error: e=> console.log(e), //API lỗi (400 / 500)
-        complete: () => { //Request hoàn tất
+        next: v=> console.log(v), 
+        error: e=> console.log(e), 
+        complete: () => {
           alert("Form Submitted successfully" + JSON.stringify(this.inventoryData));
           this.getInventoryDetails();
         }

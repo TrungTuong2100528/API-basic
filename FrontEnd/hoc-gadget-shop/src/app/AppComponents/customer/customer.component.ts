@@ -38,7 +38,7 @@ export class CustomerComponent {
       console.log(this.customerDetails);
     })
   }
-
+  //mở form thêm
   openConfirmDialog(customerId: any) {
     this.modalService.open(DialogBoxComponent).result.then(data => {
       if (data.event == "confirm") {
