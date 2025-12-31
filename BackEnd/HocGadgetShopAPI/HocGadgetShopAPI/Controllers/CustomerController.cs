@@ -116,5 +116,30 @@ namespace HocGadgetShopAPI.Controllers
 
             return Ok();
         }
+
+        [HttpPut]
+        public ActionResult UpdateICustomerDetails(CustomerRequestDto customerRequest)
+        {
+            using SqlConnection connection = CreateConnection();
+            SqlCommand command = new SqlCommand
+            {
+                CommandText = "sp_UpdateCustomerDetails",
+                CommandType = CommandType.StoredProcedure,
+                Connection = connection
+            };
+            connection.Open();
+
+            command.Parameters.AddWithValue("@CustomerId", customerRequest.CustomerId);
+            command.Parameters.AddWithValue("@FirstName", customerRequest.FirstName);
+            command.Parameters.AddWithValue("@LastName", customerRequest.LastName);
+            command.Parameters.AddWithValue("@Email", customerRequest.Email);
+            command.Parameters.AddWithValue("@Phone", customerRequest.Phone);
+            command.Parameters.AddWithValue("@RegistrationDate", customerRequest.RegistrationDate);
+
+            command.ExecuteNonQuery();
+
+            connection.Close();
+            return Ok();
+        }
     }
 }

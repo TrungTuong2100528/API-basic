@@ -5,7 +5,7 @@
 - Angular (Visual Studio Code)
 - SQL Server 19
 - Bootstrap
-
+- NodeJS v20.19.6
 ## 📂 Project Structure
 - BackEnd: ASP.NET Core API
 - FrontEnd: Angular application
