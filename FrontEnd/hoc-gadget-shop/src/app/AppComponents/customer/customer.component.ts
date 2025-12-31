@@ -4,6 +4,7 @@ import { CustomerDialogBoxComponent } from '../customer-dialog-box/customer-dial
 import { HttpClient } from '@angular/common/http';
 // import { NgForOf } from "../../../../node_modules/@angular/common/common_module.d-NEF7UaHr";
 import { CommonModule, NgFor } from '@angular/common';
+import { DialogBoxComponent } from '../../AppComponent/dialog-box/dialog-box.component';
 @Component({
   selector: 'app-customer',
   imports: [NgFor, CommonModule],
@@ -36,5 +37,19 @@ export class CustomerComponent {
       this.customerDetails = data;
       console.log(this.customerDetails);
     })
+  }
+
+  openConfirmDialog(customerId: any){
+    this.modalService.open(DialogBoxComponent).result.then(data=>{
+        if(data.event == "confirm"){
+          this.DeleteCustomerDetials(customerId);
+        }
+      })
+  }
+  DeleteCustomerDetials(customerId: any){
+    let aipUrl="https://localhost:7243/api/Customer?customerId=";
+    this.httpClien.delete(aipUrl+customerId).subscribe(data=>
+      this.GetCustomerDetail()
+    );
   }
 }

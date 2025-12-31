@@ -37,7 +37,7 @@ namespace HocGadgetShopAPI.Controllers
                 Connection = connection
             };
 
-  
+
             command.Parameters.AddWithValue("@CustomerId", requestDto.CustomerId);
             command.Parameters.AddWithValue("@FirstName", requestDto.FirstName);
             command.Parameters.AddWithValue("@LastName", requestDto.LastName);
@@ -69,7 +69,7 @@ namespace HocGadgetShopAPI.Controllers
             connection.Open();
 
             List<CustomerDto> customers = new List<CustomerDto>();
-            using(SqlDataReader reader = command.ExecuteReader())
+            using (SqlDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {
@@ -79,7 +79,7 @@ namespace HocGadgetShopAPI.Controllers
                     customerDto.LastName = Convert.ToString(reader["LastName"]);
                     customerDto.Phone = Convert.ToString(reader["Phone"]);
                     customerDto.Email = Convert.ToString(reader["Email"]);
-                    customerDto.RegistrationDate = Convert.ToDateTime(reader["RegistrationDate"]);
+                    customerDto.RegistrationDate = Convert.ToString(reader["RegistrationDate"]);
 
                     customers.Add(customerDto);
                 }
@@ -90,5 +90,31 @@ namespace HocGadgetShopAPI.Controllers
             return Ok(customers);
         }
 
+
+        [HttpDelete]
+        public ActionResult DeleteCustomerData(int customerId)
+        {
+            using SqlConnection connection = CreateConnection();
+
+
+            SqlCommand command = new SqlCommand
+            {
+                CommandText = "sp_DeleteCustomerDetails",
+                CommandType = CommandType.StoredProcedure,
+                Connection = connection
+            };
+
+
+            command.Parameters.AddWithValue("@CustomerId", customerId);
+
+
+            connection.Open();
+
+            command.ExecuteNonQuery();
+
+            connection.Close();
+
+            return Ok();
+        }
     }
 }
