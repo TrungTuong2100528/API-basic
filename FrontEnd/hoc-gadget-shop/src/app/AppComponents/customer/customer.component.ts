@@ -55,7 +55,10 @@ export class CustomerComponent {
 
 
   openEditDialogBox(customer: any) {
+    // modalReference để: Truyền dữ liệu vào modal
     const modalReference = this.modalService.open(CustomerDialogBoxComponent);
+  
+    //CustomerDialogBoxComponent đã được tạo và gán dữ liệu từ component cha → component modal
     modalReference.componentInstance.customer = {
       customerId: customer.customerId,
       firstName: customer.firstName,

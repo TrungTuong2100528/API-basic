@@ -11,13 +11,20 @@ namespace HocGadgetShopAPI.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
+        //tạo IConfiguration(chìa khóa để đọc appsettings)
+        //Khai báo biến _configuration
+        private readonly IConfiguration _configuration; //Dùng để đọc cấu hình ứng dụng: appsettings.json or appsettings.Development.json
+      
+        //truyền IConfiguration vào controller
         public CustomerController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
+
+        //Tạo kết nối SQL Server sử dụng nhiều lần
         private SqlConnection CreateConnection()
         {
+            //Lấy connection string từ appsettings.json
             return new SqlConnection(
                 _configuration.GetConnectionString("DefaultConnection")
             );
