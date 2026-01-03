@@ -147,5 +147,44 @@ namespace HocGadgetShopAPI.Controllers
             connection.Close();
             return Ok();
         }
+
+        [HttpGet("search")]
+        //[FromQuery] là attribute để nói rõ cho framework biết Dữ liệu này lấy từ Query String của URL
+        public IActionResult SearchInventory([FromQuery] string productName)
+        {
+            using SqlConnection connection = CreateConnection();
+
+            SqlCommand command = new SqlCommand
+            {
+                CommandText = "sp_searchInventory",
+                CommandType = CommandType.StoredProcedure,
+                Connection = connection
+            };
+
+            // Truyền parameter cho stored procedure
+            command.Parameters.AddWithValue("@productName", productName);
+
+            connection.Open();
+            List<InventoryDto> response = new List<InventoryDto>();
+
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    InventoryDto dto = new InventoryDto
+                    {
+                        ProductID = Convert.ToInt32(reader["ProductId"]),
+                        ProductName = Convert.ToString(reader["ProductName"]),
+                        AvailableQty = Convert.ToInt32(reader["AvailableQty"]),
+                        ReOderPoint = Convert.ToInt32(reader["ReOderPoint"])
+                    };
+
+                    response.Add(dto);
+                }
+            }
+
+            return Ok(response);
+        }
+
     }
 }

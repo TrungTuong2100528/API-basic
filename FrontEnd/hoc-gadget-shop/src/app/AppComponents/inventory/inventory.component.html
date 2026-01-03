@@ -8,7 +8,8 @@
 
     <div class="col-md-3">
       <label class="form-label">Product Id</label>
-      <input type="text" class="form-control" [disabled]="disavledProductIdInput" placeholder="1001" [(ngModel)]="inventoryData.productID" name="productID">
+      <input type="text" class="form-control" [disabled]="disavledProductIdInput" placeholder="1001"
+        [(ngModel)]="inventoryData.productID" name="productID">
     </div>
 
     <div class="col-md-3">
@@ -23,12 +24,14 @@
 
     <div class="col-md-3">
       <label class="form-label">Quantity Available</label>
-      <input type="number" class="form-control" placeholder="0" [(ngModel)]="inventoryData.availableQty" name="availableQTy">
+      <input type="number" class="form-control" placeholder="0" [(ngModel)]="inventoryData.availableQty"
+        name="availableQTy">
     </div>
 
     <div class="col-md-3">
       <label class="form-label">Reorder Point</label>
-      <input type="number" class="form-control" placeholder="0" [(ngModel)]="inventoryData.reOderPoint" name="reoderPoint">
+      <input type="number" class="form-control" placeholder="0" [(ngModel)]="inventoryData.reOderPoint"
+        name="reoderPoint">
     </div>
 
     <!-- Submit button -->
@@ -39,14 +42,17 @@
 
   <!-- Inventory Details -->
   <h5 class="fw-bold mb-3">Inventory Details</h5>
-
+  <form class="d-flex" role="search">
+    <input class="form-control me-2" type="search" placeholder="Enter product name..." aria-label="Search" />
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  </form> <br>
   <table class="table table-bordered table-striped align-middle">
     <thead class="table-light">
       <tr>
         <th>Product Id</th>
         <th>Product Name</th>
-        <th>Stock 'hàng' Available 'Có sẳn'</th>
-        <th>Reorder Point 'điểm đặt hàng'</th>
+        <th>Stock Available</th>
+        <th>Reorder Point</th>
         <th>Action</th>
       </tr>
     </thead>
