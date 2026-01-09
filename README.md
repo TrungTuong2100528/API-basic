@@ -1,17 +1,17 @@
 # API Basic – Inventory Management
 
-## 🔧 Technologies
+## Technologies
 - ASP.NET Core Web API (Visual Studio 2022)
 - Angular (Visual Studio Code)
 - SQL Server 19
 - Bootstrap
 - NodeJS v20.19.6
-## 📂 Project Structure
+## Project Structure
 - BackEnd: ASP.NET Core API
 - FrontEnd: Angular application
 - Database: SQL scripts
 
-## ▶ How to Run
+## How to Run
 
 ### Backend
 1. Open BackEnd in Visual Studio
