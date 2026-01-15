@@ -1,4 +1,4 @@
-﻿namespace HocGadgetShopAPI.Models
+﻿namespace HocGadgetShopAPI.Models.Dtos.Inventory
 {
     public class InventoryDto
     {
