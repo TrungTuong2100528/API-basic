@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
-using HocGadgetShopAPI.Models;
+using HocGadgetShopAPI.Business.Interfaces;
+using HocGadgetShopAPI.Models.Dtos.Inventory;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -16,174 +17,24 @@ namespace HocGadgetShopAPI.Controllers
     [ApiController]
     public class InventoryController : ControllerBase
     {
-        //sẽ tự động inject config vào controller (Dependency Injection)
-        private readonly IConfiguration _configuration;
+        private readonly IInventoryService _service;
 
-        public InventoryController(IConfiguration configuration)
+        public InventoryController(IInventoryService service)
         {
-            _configuration = configuration;
+            _service = service;
         }
-        //Tạo 1 helper method: Không còn password trong code; Chỉ đổi DB ở appsettings
-        private SqlConnection CreateConnection()
-        {
-            return new SqlConnection(
-                _configuration.GetConnectionString("DefaultConnection")
-            );
-        }
-
 
         [HttpPost]
-        public ActionResult SaveInventoryData(InventoryRequestDto requestDto)
+        public IActionResult Create([FromBody] InventoryRequestDto dto)
         {
-            using SqlConnection connection = CreateConnection();
-
-            //Tạo SqlCommand
-            SqlCommand command = new SqlCommand
-            {
-                CommandText = "sp_SaveinventoryData",
-                CommandType = CommandType.StoredProcedure,
-                Connection = connection
-            };
-           
-            //Truyền tham số cho Stored Procedure
-            command.Parameters.AddWithValue("@ProductID", requestDto.ProductID);
-            command.Parameters.AddWithValue("@ProductName", requestDto.ProductName);
-            command.Parameters.AddWithValue("@AvailableQTy", requestDto.AvailableQTy);
-            command.Parameters.AddWithValue("@ReOderPoint", requestDto.ReOderPoint);
-
-            //Thực thi SQL
-            connection.Open();
-            //ExecuteNonQuery() dùng để INSERT / UPDATE / DELETE
-            command.ExecuteNonQuery();
-            connection.Close();
-            //B4 Controller xử lý logic
-            return Ok();
+            _service.Save(dto);
+            return Ok(new { message = "Created successfully" });
         }
 
         [HttpGet]
-        //Lấy danh sách inventory
-        public ActionResult GetInventoryData()
+        public IActionResult GetAll()
         {
-            using SqlConnection connection = CreateConnection();
-
-            SqlCommand command = new SqlCommand
-            {
-                CommandText = "sp_GetInventoryData",
-                CommandType = CommandType.StoredProcedure,
-                Connection = connection
-            };
-            //Mở kết nối & chuẩn bị list
-            connection.Open();
-            List<InventoryDto> respone = new List<InventoryDto>();
-
-            //Đọc dữ liệu bằng SqlDataReader
-            using (SqlDataReader sqlDataReader = command.ExecuteReader()) //ExecuteReader dùng để SELECT(trả về nhiều dòng)
-            {
-                //Vòng lặp đọc từng dòng
-                while (sqlDataReader.Read())
-                {
-                    //Map dữ liệu SQL → DTO
-                    InventoryDto inventoryDto = new InventoryDto();
-                    inventoryDto.ProductID = Convert.ToInt32(sqlDataReader["ProductId"]);
-                    inventoryDto.ProductName = Convert.ToString(sqlDataReader["ProductName"]);
-                    inventoryDto.AvailableQty = Convert.ToInt32(sqlDataReader["AvailableQty"]);
-                    inventoryDto.ReOderPoint = Convert.ToInt32(sqlDataReader["ReOderPoint"]);
-
-                    //Thêm vào list
-                    respone.Add(inventoryDto);
-                }
-            }
-            //Đóng kết nối & trả kết quả
-            connection.Close();
-            return Ok(respone);
-        }
-
-        [HttpDelete]
-        //Lấy danh sách inventory
-        public ActionResult DeleteInventoryData( int productId)
-        {
-            using SqlConnection connection = CreateConnection();
-
-            SqlCommand command = new SqlCommand
-            {
-                CommandText = "sp_DeleteInventoryDetails",
-                CommandType = CommandType.StoredProcedure,
-                Connection = connection
-            };
-            //Mở kết nối & chuẩn bị list
-            connection.Open();
-
-            command.Parameters.AddWithValue("@ProductId", productId);
-
-            command.ExecuteNonQuery();
-
-            //Đóng kết nối & trả kết quả
-            connection.Close();
-            return Ok();
-        }
-
-        [HttpPut]
-        //Lấy danh sách inventory
-        public ActionResult UpdateInventoryData(InventoryRequestDto inventoryRequest)
-        {
-            using SqlConnection connection = CreateConnection();
-            SqlCommand command = new SqlCommand
-            {
-                CommandText = "sp_UpdateInventoryData",
-                CommandType = CommandType.StoredProcedure,
-                Connection = connection
-            };
-            //Mở kết nối & chuẩn bị list
-            connection.Open();
-
-            command.Parameters.AddWithValue("@ProductId", inventoryRequest.ProductID);
-            command.Parameters.AddWithValue("@ProductName", inventoryRequest.ProductName);
-            command.Parameters.AddWithValue("@AvailableQTy", inventoryRequest.AvailableQTy);
-            command.Parameters.AddWithValue("@ReOderPoint", inventoryRequest.ReOderPoint);
-
-            command.ExecuteNonQuery();
-
-            //Đóng kết nối & trả kết quả
-            connection.Close();
-            return Ok();
-        }
-
-        [HttpGet("search")]
-        //[FromQuery] là attribute để nói rõ cho framework biết Dữ liệu này lấy từ Query String của URL
-        public IActionResult SearchInventory([FromQuery] string productName)
-        {
-            using SqlConnection connection = CreateConnection();
-
-            SqlCommand command = new SqlCommand
-            {
-                CommandText = "sp_searchInventory",
-                CommandType = CommandType.StoredProcedure,
-                Connection = connection
-            };
-
-            // Truyền parameter cho stored procedure
-            command.Parameters.AddWithValue("@productName", productName);
-
-            connection.Open();
-            List<InventoryDto> response = new List<InventoryDto>();
-
-            using (SqlDataReader reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    InventoryDto dto = new InventoryDto
-                    {
-                        ProductID = Convert.ToInt32(reader["ProductId"]),
-                        ProductName = Convert.ToString(reader["ProductName"]),
-                        AvailableQty = Convert.ToInt32(reader["AvailableQty"]),
-                        ReOderPoint = Convert.ToInt32(reader["ReOderPoint"])
-                    };
-
-                    response.Add(dto);
-                }
-            }
-
-            return Ok(response);
+            return Ok(_service.GetAll());
         }
 
     }

@@ -1,4 +1,4 @@
-﻿using HocGadgetShopAPI.Models;
+﻿using HocGadgetShopAPI.Models.Dtos.Customer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;

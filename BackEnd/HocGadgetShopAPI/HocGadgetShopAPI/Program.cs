@@ -1,5 +1,10 @@
 ﻿
 //thêm vào
+using HocGadgetShopAPI.Business.Interfaces;
+using HocGadgetShopAPI.Business;
+using HocGadgetShopAPI.Repository.Interfaces;
+using HocGadgetShopAPI.Repository;
+
 var MyAllowSecificOrigins = "_MyAllowSecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+//Đăng ký DI
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
