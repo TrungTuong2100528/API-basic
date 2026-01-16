@@ -17,18 +17,21 @@ namespace HocGadgetShopAPI.Controllers
     [ApiController]
     public class InventoryController : ControllerBase
     {
+        //gọi service
         private readonly IInventoryService _service;
-
+        //readonly: chỉ được gán 1 lần 
         public InventoryController(IInventoryService service)
         {
             _service = service;
         }
 
         [HttpPost]
+        //IActionResult: đại diện cho kết quả HTTP response mà API trả về cho client
+        //[FromBody] Dữ liệu của tham số này được lấy từ BODY của HTTP request
         public IActionResult Create([FromBody] InventoryRequestDto dto)
         {
             _service.Save(dto);
-            return Ok(new { message = "Created successfully" });
+            return Ok("Created successfully");
         }
 
         [HttpGet]

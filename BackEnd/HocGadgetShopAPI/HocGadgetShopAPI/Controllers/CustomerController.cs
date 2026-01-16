@@ -1,4 +1,5 @@
-﻿using HocGadgetShopAPI.Models.Dtos.Customer;
+﻿using HocGadgetShopAPI.Business.Interfaces;
+using HocGadgetShopAPI.Models.Dtos.Customer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -11,141 +12,37 @@ namespace HocGadgetShopAPI.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        //tạo IConfiguration(chìa khóa để đọc appsettings)
-        //Khai báo biến _configuration
-        private readonly IConfiguration _configuration; //Dùng để đọc cấu hình ứng dụng: appsettings.json or appsettings.Development.json
-      
-        //truyền IConfiguration vào controller
-        public CustomerController(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        private readonly ICustomerService _service;
 
-        //Tạo kết nối SQL Server sử dụng nhiều lần
-        private SqlConnection CreateConnection()
+        public CustomerController(ICustomerService service)
         {
-            //Lấy connection string từ appsettings.json
-            return new SqlConnection(
-                _configuration.GetConnectionString("DefaultConnection")
-            );
+            _service = service;
         }
-
 
         [HttpPost]
-        public ActionResult SaveCustomerData(CustomerRequestDto requestDto)
+        public IActionResult Create(CustomerRequestDto dto)
         {
-            using SqlConnection connection = CreateConnection();
-
-
-            SqlCommand command = new SqlCommand
-            {
-                CommandText = "sp_SaveCustomerDetails",
-                CommandType = CommandType.StoredProcedure,
-                Connection = connection
-            };
-
-
-            command.Parameters.AddWithValue("@CustomerId", requestDto.CustomerId);
-            command.Parameters.AddWithValue("@FirstName", requestDto.FirstName);
-            command.Parameters.AddWithValue("@LastName", requestDto.LastName);
-            command.Parameters.AddWithValue("@Email", requestDto.Email);
-            command.Parameters.AddWithValue("@Phone", requestDto.Phone);
-            command.Parameters.AddWithValue("@RegistrationDate", requestDto.RegistrationDate);
-
-            connection.Open();
-
-            command.ExecuteNonQuery();
-
-            connection.Close();
-
-            return Ok();
+            _service.Save(dto);
+            return Ok(new { message = "Customer created successfully" });
         }
 
         [HttpGet]
-        public ActionResult GetCustomerData()
+        public IActionResult GetAll()
         {
-            using SqlConnection connection = CreateConnection();
-
-            SqlCommand command = new SqlCommand
-            {
-                CommandText = "sp_GetCustomerDetails",
-                CommandType = CommandType.StoredProcedure,
-                Connection = connection
-            };
-
-            connection.Open();
-
-            List<CustomerDto> customers = new List<CustomerDto>();
-            using (SqlDataReader reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    CustomerDto customerDto = new CustomerDto();
-                    customerDto.CustomerId = Convert.ToInt32(reader["CustomerId"]);
-                    customerDto.FirstName = Convert.ToString(reader["FirstName"]);
-                    customerDto.LastName = Convert.ToString(reader["LastName"]);
-                    customerDto.Phone = Convert.ToString(reader["Phone"]);
-                    customerDto.Email = Convert.ToString(reader["Email"]);
-                    customerDto.RegistrationDate = Convert.ToString(reader["RegistrationDate"]);
-
-                    customers.Add(customerDto);
-                }
-            }
-
-            connection.Close();
-
-            return Ok(customers);
-        }
-
-
-        [HttpDelete]
-        public ActionResult DeleteCustomerData(int customerId)
-        {
-            using SqlConnection connection = CreateConnection();
-
-
-            SqlCommand command = new SqlCommand
-            {
-                CommandText = "sp_DeleteCustomerDetails",
-                CommandType = CommandType.StoredProcedure,
-                Connection = connection
-            };
-
-
-            command.Parameters.AddWithValue("@CustomerId", customerId);
-
-
-            connection.Open();
-
-            command.ExecuteNonQuery();
-
-            connection.Close();
-
-            return Ok();
+            return Ok(_service.GetAll());
         }
 
         [HttpPut]
-        public ActionResult UpdateICustomerDetails(CustomerRequestDto customerRequest)
+        public IActionResult Update(CustomerRequestDto dto)
         {
-            using SqlConnection connection = CreateConnection();
-            SqlCommand command = new SqlCommand
-            {
-                CommandText = "sp_UpdateCustomerDetails",
-                CommandType = CommandType.StoredProcedure,
-                Connection = connection
-            };
-            connection.Open();
+            _service.Update(dto);
+            return Ok();
+        }
 
-            command.Parameters.AddWithValue("@CustomerId", customerRequest.CustomerId);
-            command.Parameters.AddWithValue("@FirstName", customerRequest.FirstName);
-            command.Parameters.AddWithValue("@LastName", customerRequest.LastName);
-            command.Parameters.AddWithValue("@Email", customerRequest.Email);
-            command.Parameters.AddWithValue("@Phone", customerRequest.Phone);
-            command.Parameters.AddWithValue("@RegistrationDate", customerRequest.RegistrationDate);
-
-            command.ExecuteNonQuery();
-
-            connection.Close();
+        [HttpDelete("{customerId}")]
+        public IActionResult Delete(int customerId)
+        {
+            _service.Delete(customerId);
             return Ok();
         }
     }
