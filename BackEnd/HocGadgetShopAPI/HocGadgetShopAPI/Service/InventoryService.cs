@@ -15,7 +15,6 @@ namespace HocGadgetShopAPI.Business
 
         public void Save(InventoryRequestDto dto)
         {
-            // Business rule (ví dụ)
             if (dto.AvailableQTy < 0)
                 throw new Exception("Quantity must be >= 0");
 
