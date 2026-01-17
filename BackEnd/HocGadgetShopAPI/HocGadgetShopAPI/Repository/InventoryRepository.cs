@@ -29,6 +29,7 @@ namespace HocGadgetShopAPI.Repository
 
             connection.Open();
             command.ExecuteNonQuery();
+
         }
 
         public List<InventoryDto> GetAll()
@@ -59,17 +60,72 @@ namespace HocGadgetShopAPI.Repository
 
         public void Update(InventoryRequestDto dto)
         {
-            throw new NotImplementedException();
+            using SqlConnection connection = _connectionFactory.CreateConnection();
+            SqlCommand command = new SqlCommand("sp_UpdateInventoryData", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            connection.Open();
+
+            command.Parameters.AddWithValue("@ProductId", dto.ProductID);
+            command.Parameters.AddWithValue("@ProductName", dto.ProductName);
+            command.Parameters.AddWithValue("@AvailableQTy", dto.AvailableQTy);
+            command.Parameters.AddWithValue("@ReOderPoint", dto.ReOderPoint);
+
+            command.ExecuteNonQuery();
+
+            connection.Close();
         }
 
         public void Delete(int productId)
         {
-            throw new NotImplementedException();
+            using SqlConnection connection = _connectionFactory.CreateConnection();
+            SqlCommand sqlCommand = new SqlCommand("sp_DeleteInventoryDetails", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            //Mở kết nối & chuẩn bị list
+            connection.Open();
+
+            sqlCommand.Parameters.AddWithValue("@ProductId", productId);
+
+            sqlCommand.ExecuteNonQuery();
+
+
         }
 
         public List<InventoryDto> Search(string productName)
         {
-            throw new NotImplementedException();
+            using SqlConnection connection = _connectionFactory.CreateConnection();
+
+            SqlCommand command = new SqlCommand("sp_searchInventory", connection)
+            {
+                CommandType = CommandType.StoredProcedure,
+            };
+
+            command.Parameters.AddWithValue("@productName", productName);
+
+            connection.Open();
+            List<InventoryDto> response = new List<InventoryDto>();
+
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    InventoryDto dto = new InventoryDto
+                    {
+                        ProductID = Convert.ToInt32(reader["ProductId"]),
+                        ProductName = Convert.ToString(reader["ProductName"]),
+                        AvailableQty = Convert.ToInt32(reader["AvailableQty"]),
+                        ReOderPoint = Convert.ToInt32(reader["ReOderPoint"])
+                    };
+
+                    response.Add(dto);
+                }
+            }
+
+            return response;
         }
 
     }

@@ -7,5 +7,10 @@ namespace HocGadgetShopAPI.Business.Interfaces
         void Save(InventoryRequestDto dto);
         List<InventoryDto> GetAll();
 
+        void Update(InventoryRequestDto dto);
+        void Delete(int productId);
+
+        List<InventoryDto> Search(string productName);
+
     }
 }

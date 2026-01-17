@@ -36,14 +36,14 @@ namespace HocGadgetShopAPI.Controllers
         public IActionResult Update(CustomerRequestDto dto)
         {
             _service.Update(dto);
-            return Ok();
+            return Ok(new { message = "Update successfully" });
         }
 
-        [HttpDelete("{customerId}")]
+        [HttpDelete]
         public IActionResult Delete(int customerId)
         {
             _service.Delete(customerId);
-            return Ok();
+            return Ok(new { message = "Deleted successfully" });
         }
     }
 }

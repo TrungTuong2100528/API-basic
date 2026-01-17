@@ -31,7 +31,11 @@ namespace HocGadgetShopAPI.Controllers
         public IActionResult Create([FromBody] InventoryRequestDto dto)
         {
             _service.Save(dto);
-            return Ok("Created successfully");
+            return Ok(new
+            {
+                message = "Created successfully"
+            });
+
         }
 
         [HttpGet]
@@ -40,5 +44,31 @@ namespace HocGadgetShopAPI.Controllers
             return Ok(_service.GetAll());
         }
 
+        [HttpPut]
+        public IActionResult Update(InventoryRequestDto dto)
+        {
+            _service.Update(dto);
+            return Ok(new
+            {
+                message = "Updated successfully"
+            });
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int productId)
+        {
+            _service.Delete(productId);
+            return Ok(new
+            {
+                message = "Deleted successfully"
+            });
+        }
+
+        [HttpGet("Search")]
+        public IActionResult Search([FromQuery] string productName)
+        {
+           return Ok(_service.Search(productName));
+           
+        }
     }
 }
