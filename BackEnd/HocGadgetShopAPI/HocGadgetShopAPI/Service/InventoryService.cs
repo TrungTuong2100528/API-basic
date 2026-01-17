@@ -15,15 +15,26 @@ namespace HocGadgetShopAPI.Business
 
         public void Save(InventoryRequestDto dto)
         {
-            if (dto.AvailableQTy < 0)
-                throw new Exception("Quantity must be >= 0");
-
             _repository.Create(dto);
         }
 
         public List<InventoryDto> GetAll()
         {
             return _repository.GetAll();
+        }
+
+        public void Update(InventoryRequestDto dto)
+        {
+            _repository.Update(dto);
+        }
+        public void Delete(int productId)
+        {
+            _repository.Delete(productId);
+        }
+
+        public List<InventoryDto> Search(string productName)
+        {
+            return _repository.Search(productName);
         }
     }
 }

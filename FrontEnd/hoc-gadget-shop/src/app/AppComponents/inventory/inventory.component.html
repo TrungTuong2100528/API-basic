@@ -42,13 +42,13 @@
 
   <!-- Inventory Details -->
   <h5 class="fw-bold mb-3">Inventory Details</h5>
-  <form class="d-flex" role="search">
+  <form class="d-flex" role="search" (ngSubmit)="SearchInventory(enterSearchData)">
     <input class="form-control me-2" type="search" placeholder="Enter product name..." 
     aria-label="Search"
      [(ngModel)]="enterSearchData"
       name="productName"  
     >
-    <button class="btn btn-outline-success" type="submit" (click)="SearchInventory(enterSearchData)">Search</button>
+    <button type="submit" class="btn btn-outline-success">Search</button>
   </form> <br>
   <table class="table table-bordered table-striped align-middle">
     <thead class="table-light">
