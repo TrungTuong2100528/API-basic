@@ -1,5 +1,5 @@
 ﻿namespace HocGadgetShopAPI.Models.Dtos.Inventory
-{   //B2. Request đến ASP.NET API
+{ 
     public class InventoryRequestDto
     {
         #region Properties
