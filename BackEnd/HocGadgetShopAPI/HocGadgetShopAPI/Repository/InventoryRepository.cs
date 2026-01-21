@@ -1,5 +1,6 @@
 ﻿using HocGadgetShopAPI.Infrastructure;
 using HocGadgetShopAPI.Models.Dtos.Inventory;
+using HocGadgetShopAPI.Models.Entity;
 using HocGadgetShopAPI.Repository.Interfaces;
 using Microsoft.Data.SqlClient;
 using System.Data;
@@ -14,7 +15,7 @@ namespace HocGadgetShopAPI.Repository
         {
             _connectionFactory = connectionFactory;
         }
-        public void Create(InventoryRequestDto dto)
+        public void Create(InventoryEntity entity)
         {
             using SqlConnection connection = _connectionFactory.CreateConnection();
             SqlCommand command = new SqlCommand("sp_SaveinventoryData", connection)
@@ -22,17 +23,17 @@ namespace HocGadgetShopAPI.Repository
                 CommandType = CommandType.StoredProcedure
             };
 
-            command.Parameters.AddWithValue("@ProductID", dto.ProductID);
-            command.Parameters.AddWithValue("@ProductName", dto.ProductName);
-            command.Parameters.AddWithValue("@AvailableQTy", dto.AvailableQTy);
-            command.Parameters.AddWithValue("@ReOderPoint", dto.ReOderPoint);
+            command.Parameters.AddWithValue("@ProductID", entity.ProductId);
+            command.Parameters.AddWithValue("@ProductName", entity.ProductName);
+            command.Parameters.AddWithValue("@AvailableQTy", entity.AvailableQty);
+            command.Parameters.AddWithValue("@ReOderPoint", entity.ReOrderPoint);
 
             connection.Open();
             command.ExecuteNonQuery();
 
         }
 
-        public List<InventoryDto> GetAll()
+        public List<InventoryEntity> GetAll()
         {
             using SqlConnection connection = _connectionFactory.CreateConnection();
             SqlCommand command = new SqlCommand("sp_GetInventoryData", connection)
@@ -41,24 +42,29 @@ namespace HocGadgetShopAPI.Repository
             };
 
             connection.Open();
-            List<InventoryDto> result = new();
+            // tạo danh sách lấy dự liệu từ DB và DB sẽ loại có dữ liệu theo điều kiện của entity
+            List<InventoryEntity> result = new List<InventoryEntity>();
 
             using SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                result.Add(new InventoryDto
-                {
-                    ProductID = (int)reader["ProductId"],
-                    ProductName = reader["ProductName"].ToString(),
-                    AvailableQty = (int)reader["AvailableQty"],
-                    ReOderPoint = (int)reader["ReOderPoint"]
-                });
-            }
+                //Tạo object rỗng để gán dần các dữ liệu của các method
+                var entity = new InventoryEntity();
 
+                entity.SetProductInfo(
+                    (int)reader["ProductId"],
+                    reader["ProductName"].ToString()
+                );
+
+                entity.SetInitialQuantity((int)reader["AvailableQty"]);
+                entity.SetReOrderPoint((int)reader["ReOderPoint"]);
+
+                result.Add(entity);
+            }
             return result;
         }
 
-        public void Update(InventoryRequestDto dto)
+        public void Update(InventoryEntity entity)
         {
             using SqlConnection connection = _connectionFactory.CreateConnection();
             SqlCommand command = new SqlCommand("sp_UpdateInventoryData", connection)
@@ -68,10 +74,10 @@ namespace HocGadgetShopAPI.Repository
 
             connection.Open();
 
-            command.Parameters.AddWithValue("@ProductId", dto.ProductID);
-            command.Parameters.AddWithValue("@ProductName", dto.ProductName);
-            command.Parameters.AddWithValue("@AvailableQTy", dto.AvailableQTy);
-            command.Parameters.AddWithValue("@ReOderPoint", dto.ReOderPoint);
+            command.Parameters.AddWithValue("@ProductId", entity.ProductId);
+            command.Parameters.AddWithValue("@ProductName", entity.ProductName);
+            command.Parameters.AddWithValue("@AvailableQTy", entity.AvailableQty);
+            command.Parameters.AddWithValue("@ReOderPoint", entity.ReOrderPoint);
 
             command.ExecuteNonQuery();
 
@@ -95,7 +101,7 @@ namespace HocGadgetShopAPI.Repository
 
         }
 
-        public List<InventoryDto> Search(string productName)
+        public List<InventoryEntity> Search(string productName)
         {
             using SqlConnection connection = _connectionFactory.CreateConnection();
 
@@ -107,22 +113,26 @@ namespace HocGadgetShopAPI.Repository
             command.Parameters.AddWithValue("@productName", productName);
 
             connection.Open();
-            List<InventoryDto> response = new List<InventoryDto>();
+            // tạo danh sách lấy dự liệu từ DB và DB sẽ loại có dữ liệu theo điều kiện của entity
+            List<InventoryEntity> response = new List<InventoryEntity>();
 
             using (SqlDataReader reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    InventoryDto dto = new InventoryDto
-                    {
-                        ProductID = Convert.ToInt32(reader["ProductId"]),
-                        ProductName = Convert.ToString(reader["ProductName"]),
-                        AvailableQty = Convert.ToInt32(reader["AvailableQty"]),
-                        ReOderPoint = Convert.ToInt32(reader["ReOderPoint"])
-                    };
+                    var entity = new InventoryEntity();
 
-                    response.Add(dto);
+                    entity.SetProductInfo(
+                        Convert.ToInt32(reader["ProductId"]),
+                        Convert.ToString(reader["ProductName"])
+                    );
+
+                    entity.SetInitialQuantity(Convert.ToInt32(reader["AvailableQty"]));
+                    entity.SetReOrderPoint(Convert.ToInt32(reader["ReOderPoint"]));
+
+                    response.Add(entity);
                 }
+
             }
 
             return response;
