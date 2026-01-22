@@ -1,12 +1,13 @@
 ﻿using HocGadgetShopAPI.Models.Dtos.Customer;
+using HocGadgetShopAPI.Models.Entity;
 
 namespace HocGadgetShopAPI.Repository.Interfaces
 {
     public interface ICustomerRepository
     {
-        void Create(CustomerRequestDto dto);
-        void Update(CustomerRequestDto dto);
+        void Create(CustomerEntity entity);
+        void Update(CustomerEntity entity);
         void Delete(int customerId);
-        List<CustomerDto> GetAll();
+        List<CustomerEntity> GetAll();
     }
 }
