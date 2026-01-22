@@ -1,5 +1,6 @@
 ﻿using HocGadgetShopAPI.Business.Interfaces;
 using HocGadgetShopAPI.Models.Dtos.Customer;
+using HocGadgetShopAPI.Models.Entity;
 using HocGadgetShopAPI.Repository.Interfaces;
 
 namespace HocGadgetShopAPI.Business
@@ -15,12 +16,28 @@ namespace HocGadgetShopAPI.Business
 
         public void Save(CustomerRequestDto dto)
         {
-            _repository.Create(dto);
+            var entity = new CustomerEntity();
+            entity.SetCustomerInfo(dto.CustomerId, dto.FirstName,dto.LastName,dto.RegistrationDate);
+            entity.SetPhone(dto.Phone);
+            entity.SetEmail(dto.Email);
+
+            _repository.Create(entity);
         }
 
         public List<CustomerDto> GetAll()
         {
-            return _repository.GetAll();
+            var entity = _repository.GetAll();
+
+            return entity.Select(e => new CustomerDto
+            {
+                CustomerId = e.CustomerId,
+                FirstName = e.FirstName,
+                LastName = e.LastName,
+                Phone = e.Phone,
+                Email = e.Email,
+                RegistrationDate = e.RegistrationDate
+            }).ToList();
+
         }
 
         public void Delete(int customerId)
@@ -30,7 +47,12 @@ namespace HocGadgetShopAPI.Business
 
         public void Update(CustomerRequestDto dto)
         {
-            _repository.Update(dto);
+            var entity = new CustomerEntity();
+            entity.SetCustomerInfo(dto.CustomerId, dto.FirstName, dto.LastName, dto.RegistrationDate);
+            entity.SetPhone(dto.Phone);
+            entity.SetEmail(dto.Email);
+
+            _repository.Update(entity);
         }
     }
 }
