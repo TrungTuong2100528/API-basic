@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLinkWithHref, RouterModule } from '@angular/router';
-import { InventoryComponent } from './AppComponents/inventory/inventory.component';
-import { CustomerComponent } from './AppComponents/customer/customer.component';
+import { InventoryComponent } from './Features/inventory/inventory.component';
+import { CustomerComponent } from './Features/customer/customer.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ChatAIComponent } from './AppChatBox/chat-ai/chat-ai.component';
+import { ChatAIComponent } from './Features/chat-ai/chat-ai.component';
 
 @Component({
   selector: 'app-root',

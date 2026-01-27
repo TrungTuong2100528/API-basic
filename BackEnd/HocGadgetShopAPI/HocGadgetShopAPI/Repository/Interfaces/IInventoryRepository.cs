@@ -1,5 +1,5 @@
-﻿using HocGadgetShopAPI.Models.Dtos.Inventory;
-using HocGadgetShopAPI.Models.Entity;
+﻿using HocGadgetShopAPI.Models.Domain.Entity;
+using HocGadgetShopAPI.Models.Dtos.Inventory;
 
 namespace HocGadgetShopAPI.Repository.Interfaces
 {

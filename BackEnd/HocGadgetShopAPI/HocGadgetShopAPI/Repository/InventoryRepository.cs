@@ -1,6 +1,6 @@
 ﻿using HocGadgetShopAPI.Infrastructure;
+using HocGadgetShopAPI.Models.Domain.Entity;
 using HocGadgetShopAPI.Models.Dtos.Inventory;
-using HocGadgetShopAPI.Models.Entity;
 using HocGadgetShopAPI.Repository.Interfaces;
 using Microsoft.Data.SqlClient;
 using System.Data;

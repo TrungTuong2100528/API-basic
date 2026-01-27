@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DialogBoxComponent } from '../../AppComponent/dialog-box/dialog-box.component';
+import { DialogBoxComponent } from '../../Shares/dialog-box/dialog-box.component';
 @Component({
   selector: 'app-inventory',
   imports: [FormsModule, CommonModule],

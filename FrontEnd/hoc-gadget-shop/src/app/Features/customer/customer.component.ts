@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CustomerDialogBoxComponent } from '../customer-dialog-box/customer-dialog-box.component';
+import { CustomerDialogBoxComponent } from './customer-dialog-box/customer-dialog-box.component';
 import { HttpClient } from '@angular/common/http';
 // import { NgForOf } from "../../../../node_modules/@angular/common/common_module.d-NEF7UaHr";
 import { CommonModule, NgFor } from '@angular/common';
-import { DialogBoxComponent } from '../../AppComponent/dialog-box/dialog-box.component';
+import { DialogBoxComponent } from '../../Shares/dialog-box/dialog-box.component';
 @Component({
   selector: 'app-customer',
   imports: [NgFor, CommonModule],
