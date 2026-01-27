@@ -1,4 +1,4 @@
-﻿namespace HocGadgetShopAPI.Models.Entity
+﻿namespace HocGadgetShopAPI.Models.Domain.Entity
 {
     public class InventoryEntity
     {

@@ -1,5 +1,5 @@
-﻿using HocGadgetShopAPI.Models.Dtos.Customer;
-using HocGadgetShopAPI.Models.Entity;
+﻿using HocGadgetShopAPI.Models.Domain.Entity;
+using HocGadgetShopAPI.Models.Dtos.Customer;
 using HocGadgetShopAPI.Repository.Interfaces;
 using Microsoft.Data.SqlClient;
 using System.Data;
