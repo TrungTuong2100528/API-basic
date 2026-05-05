@@ -6,14 +6,19 @@ using HocGadgetShopAPI.Repository.Interfaces;
 using HocGadgetShopAPI.Repository;
 using HocGadgetShopAPI.Infrastructure;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using HocGadgetShopAPI.Service;
+using HocGadgetShopAPI.Service.Interfaces;
 var MyAllowSecificOrigins = "_MyAllowSecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ================== SERVICES ==================
 
 builder.Services.AddControllers();
-//Đăng ký DI
+//DI
 builder.Services.AddScoped<DbConnectionFactory>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -21,12 +26,36 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<JwtService>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// JWT 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(options =>
+{
+    var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//đổi địa chỉ sang 4200 cho trùng với angular visual studio code
+//CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSecificOrigins,
@@ -40,9 +69,10 @@ builder.Services.AddCors(options =>
 
 });
 
+// ================== BUILD ==================
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ================== MIDDLEWARE ==================
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -54,6 +84,7 @@ app.UseHttpsRedirection();
 // ủy quyền/ gọi chức năng
 app.UseCors(MyAllowSecificOrigins);
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

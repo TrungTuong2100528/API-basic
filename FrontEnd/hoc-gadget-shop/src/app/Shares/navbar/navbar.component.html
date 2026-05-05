@@ -1,0 +1,12 @@
+<li *ngIf="auth.isLoggedIn()" class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+    Admin
+  </a>
+  <ul class="dropdown-menu" *ngIf="auth.hasRole('Admin')">
+    <li><a class="dropdown-item" routerLink="/inventory">Inventory</a></li>
+    <li><a class="dropdown-item" routerLink="/customers">Customers</a></li>
+  </ul>
+</li>
+
+<button *ngIf="!auth.isLoggedIn()" routerLink="/login">Login</button>
+<button *ngIf="auth.isLoggedIn()" (click)="logout()">Logout</button>

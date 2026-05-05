@@ -1,0 +1,16 @@
+<div class="auth-container">
+  <h2>Đăng ký</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <input formControlName="email" placeholder="Email" />
+    <input type="password" formControlName="password" placeholder="Mật khẩu" />
+    <input type="password" formControlName="confirmPassword" placeholder="Nhập lại mật khẩu" />
+
+    <button type="submit">Đăng ký</button>
+  </form>
+
+  <p class="auth-switch">
+    Đã có tài khoản?
+    <a routerLink="/login">Đăng nhập</a>
+  </p>
+</div>
