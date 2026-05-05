@@ -1,6 +1,6 @@
 ﻿using HocGadgetShopAPI.Business.Interfaces;
 using HocGadgetShopAPI.Models.Dtos.Customer;
-using HocGadgetShopAPI.Models.Entity;
+using HocGadgetShopAPI.Models.Domain.Entity;
 using HocGadgetShopAPI.Repository.Interfaces;
 
 namespace HocGadgetShopAPI.Business

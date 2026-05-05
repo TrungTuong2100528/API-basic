@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Hoc Gadget Shop </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -12,25 +13,53 @@
         <!-- <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
         </li> -->
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" *ngIf="isAdmin">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Admin
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" routerLink="/inventory">Inventory</a></li>
             <li><a class="dropdown-item" routerLink="/Customers">Customers</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li> -->
+        <li class="nav-item" *ngIf="isStaff">
+          <a class="nav-link" routerLink="/inventory">Inventory</a>
+        </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+        <!-- Khi CHƯA login -->
+        <ng-container *ngIf="!isLoggedIn; else loggedInTpl">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login">Đăng nhập</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/register">Đăng ký</a>
+          </li>
+        </ng-container>
+
+        <!-- ĐÃ LOGIN -->
+        <ng-template #loggedInTpl>
+
+          <li class="nav-item">
+            <span class="nav-link">
+              Xin chào 👋
+            </span>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link logout-btn" (click)="logout()">
+              Đăng xuất
+            </a>
+          </li>
+
+        </ng-template>
+
+      </ul>
     </div>
   </div>
 </nav>

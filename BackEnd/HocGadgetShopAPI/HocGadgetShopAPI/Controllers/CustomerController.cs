@@ -1,5 +1,6 @@
 ﻿using HocGadgetShopAPI.Business.Interfaces;
 using HocGadgetShopAPI.Models.Dtos.Customer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -8,6 +9,7 @@ using System.Text.Json.Serialization;
 
 namespace HocGadgetShopAPI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerController : ControllerBase
