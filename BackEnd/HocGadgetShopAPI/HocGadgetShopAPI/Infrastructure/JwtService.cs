@@ -29,7 +29,7 @@ namespace HocGadgetShopAPI.Infrastructure
             {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim("role", user.Role)
         };
             // create JWT
             var token = new JwtSecurityToken(
