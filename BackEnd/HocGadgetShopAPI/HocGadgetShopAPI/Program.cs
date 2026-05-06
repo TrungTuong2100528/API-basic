@@ -61,7 +61,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSecificOrigins,
         builder =>
         {
-            builder.WithOrigins("http://localhost", "http://localhost:4200")
+            builder.WithOrigins(
+                "http://localhost:4200", // Angular
+                "http://localhost:5173"  // React
+            )
             .AllowAnyHeader()
             .AllowAnyMethod()
             .SetIsOriginAllowedToAllowWildcardSubdomains();
